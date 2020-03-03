@@ -30,8 +30,8 @@ public class NoticeController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<NoticeDTO> viewById(@PathVariable Long id){
-		NoticeDTO noticeDTO = noticeService.viewById(id);
+	public ResponseEntity<NoticeDTO> getById(@PathVariable Long id){
+		NoticeDTO noticeDTO = noticeService.getById(id);
 		
 		return noticeDTO != null ? ResponseEntity.ok().body(noticeDTO)
 				: ResponseEntity.notFound().build();
@@ -55,5 +55,12 @@ public class NoticeController {
 		boolean wasDeleted = noticeService.delete(id);
 		return wasDeleted ? ResponseEntity.ok().build() 
 				: ResponseEntity.notFound().build(); 
+	}
+	
+	@PutMapping("/view/{id}")
+	public ResponseEntity<Void> view(@PathVariable Long id){
+		boolean wasvisualizated = noticeService.viewById(id);
+		return wasvisualizated ? ResponseEntity.ok().build()
+				: ResponseEntity.notFound().build();
 	}
 }

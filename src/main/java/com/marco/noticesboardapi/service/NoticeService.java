@@ -28,7 +28,26 @@ public class NoticeService {
 	}
 	
 	@Transactional
-	public NoticeDTO viewById(long id) {
+	public NoticeDTO getById(long id) {
+		if(id != 0L) {
+			Optional<Notice> noticeOptional = noticeRepository.findById(id);
+			
+			if(noticeOptional.isPresent()) {
+				Notice notice = noticeOptional.get();
+
+				NoticeDTO noticeDTO = NoticeConverter.toDTO(notice);
+
+				return noticeDTO;		
+			} 
+		}
+		
+		return null;
+	}
+	
+	@Transactional
+	public boolean viewById(long id) {
+		boolean wasVisualizated = false;
+		
 		if(id != 0L) {
 			Optional<Notice> noticeOptional = noticeRepository.findById(id);
 			
@@ -39,14 +58,12 @@ public class NoticeService {
 					notice.setVisualizationDate(LocalDateTime.now());
 					notice = noticeRepository.save(notice);
 				};
-				
-				NoticeDTO noticeDTO = NoticeConverter.toDTO(notice);
 
-				return noticeDTO;		
+				wasVisualizated = true;		
 			} 
 		}
 		
-		return null;
+		return wasVisualizated;
 	}
 	
 	public NoticeDTO create(NoticeDTO noticeDTO) {
